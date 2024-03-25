@@ -20,6 +20,11 @@ public class OrderController {
     @PostMapping("/placeOrder")
     public String orderNewItem(@RequestBody Order order) {
         try {
+//            // Check if connected to Kafka
+//            if (!isKafkaConnected()) {
+//                return "Not connected to Kafka. Failed to place order.";
+//            }
+
             String topic = "orders";
             kafkaTemplate.send(topic, order);
             return "Order placed successfully!";
