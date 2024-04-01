@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 public class OrderController {
 
     private final KafkaTemplate<String, Order> kafkaTemplate;
-    private static final String ORDER_SERVICE_URL = "http://localhost:8081/";
+    private static final String ORDER_SERVICE_URL = "http://inventory-container:8081/";
 
     @Autowired
     public OrderController(KafkaTemplate<String, Order> kafkaTemplate) {
@@ -20,11 +20,6 @@ public class OrderController {
     @PostMapping("/placeOrder")
     public String orderNewItem(@RequestBody Order order) {
         try {
-//            // Check if connected to Kafka
-//            if (!isKafkaConnected()) {
-//                return "Not connected to Kafka. Failed to place order.";
-//            }
-
             String topic = "orders";
             kafkaTemplate.send(topic, order);
             return "Order placed successfully!";
