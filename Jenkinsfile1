@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scmGit(
+                    branches: [[name: '*/main']],
+                    extensions: [cleanBeforeCheckout()],
+                    userRemoteConfigs: [[credentialsId: 'github-ssh', url: 'git@github.com:Samah-00/order.git']]
+                )
+            }
+        }
+        stage('Build Docker Image') {
+            when {
+                expression {
+                    env.CHANGE_AUTHOR != null
+                }
+            }
+            steps {
+                echo 'Hello World'
+            }
+        }
+    }
+}
