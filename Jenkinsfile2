@@ -4,23 +4,17 @@ pipeline {
         stage('any pull request') {
             steps {
                 // Echo the values of variables
-                echo "Params: ${params}"
-                echo "Current Status: ${params.current_status}"
-                echo "Current Status 2: ${current_status}"
-                echo "Merged: ${params.merged}"
-                echo "Branch: ${params.branch}"
+                echo "Current Status: ${current_status}"
+                echo "Merged: ${merged}"
+                echo "Branch: ${branch}"
             }
         }
         stage('only accepted merges') {
             when {
-                expression { return params.current_status == "closed" && params.merged == true && params.branch == "main" }
+                expression { return current_status == "closed" && merged == true && branch == "main" }
             }
             steps {
-                echo "This is a merge"
-                // Echo the values of variables
-                echo "Current Status: ${params.current_status}"
-                echo "Merged: ${params.merged}"
-                echo "Branch: ${params.branch}"
+                echo "This is an accepted merge"
             }
         }
     }
