@@ -6,6 +6,7 @@ pipeline {
                 // Echo the values of variables
                 echo "Params: ${params}"
                 echo "Current Status: ${params.current_status}"
+                echo "Current Status 2: ${current_status}"
                 echo "Merged: ${params.merged}"
                 echo "Branch: ${params.branch}"
             }
