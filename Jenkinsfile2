@@ -11,7 +11,7 @@ pipeline {
         }
         stage('only accepted merges') {
             when {
-                expression { return current_status == "closed" && merged == true && branch == "main" }
+                expression { return ${current_status} == "closed" && ${merged} == true && ${branch} == "main" }
             }
             steps {
                 echo "This is an accepted merge"
