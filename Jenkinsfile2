@@ -7,7 +7,7 @@ pipeline {
           }
             steps {
                 echo "this is a merge"
-                )
+                }
             }
         }
 }
