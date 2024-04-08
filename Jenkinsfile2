@@ -1,13 +1,25 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
-          when {
-            expression {return params.current_status == "closed" && params.merged == true && params.branch == "main"}
-          }
+        stage('any pull request') {
             steps {
-                echo "this is a merge"
-                }
+                // Echo the values of variables
+                echo "Current Status: ${params.current_status}"
+                echo "Merged: ${params.merged}"
+                echo "Branch: ${params.branch}"
             }
         }
+        stage('only accepted merges') {
+            when {
+                expression { return params.current_status == "closed" && params.merged == true && params.branch == "main" }
+            }
+            steps {
+                echo "This is a merge"
+                // Echo the values of variables
+                echo "Current Status: ${params.current_status}"
+                echo "Merged: ${params.merged}"
+                echo "Branch: ${params.branch}"
+            }
+        }
+    }
 }
