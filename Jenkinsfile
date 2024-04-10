@@ -10,6 +10,9 @@ pipeline {
     }
     stages {
         stage('Checkout') {
+            when {
+                expression { return current_status == "closed" && merged == "true" && branch == "main" }
+            }
             steps {
                 checkout scmGit(branches: [[name: '*/main']],
                 extensions: [cleanBeforeCheckout()],
@@ -17,6 +20,9 @@ pipeline {
             }
         }
         stage('Build and Test') {
+            when {
+                expression { return current_status == "closed" && merged == "true" && branch == "main" }
+            }
             steps {
                 script {
                     bat "mvn clean install"
@@ -24,6 +30,9 @@ pipeline {
             }
         }
         stage('Build Docker Image') {
+            when {
+                expression { return current_status == "closed" && merged == "true" && branch == "main" }
+            }
             steps {
                 script {
                     dockerImage = docker.build registry + ":$BUILD_NUMBER"
@@ -31,6 +40,9 @@ pipeline {
             }
         }
         stage('Push to Docker Hub') {
+            when {
+                expression { return current_status == "closed" && merged == "true" && branch == "main" }
+            }
             steps {
                 script {
                     // Push Docker image to DockerHub
@@ -41,6 +53,9 @@ pipeline {
             }
         }
         stage('Clean up') {
+            when {
+                expression { return current_status == "closed" && merged == "true" && branch == "main" }
+            }
             steps {
                 bat 'del /s /q order' // Delete order directory recursively (/s) and quietly (/q)
                 bat "docker rmi $registry:$BUILD_NUMBER"
