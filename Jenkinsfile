@@ -10,9 +10,6 @@ pipeline {
     }
     stages {
         stage('Checkout') {
-            when {
-                expression { return current_status == "closed" && merged == "true" && branch == "main" }
-            }
             steps {
                 checkout scmGit(branches: [[name: '*/main']],
                 extensions: [cleanBeforeCheckout()],
