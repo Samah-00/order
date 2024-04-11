@@ -13,6 +13,9 @@ pipeline {
                 checkout scmGit(branches: [[name: '*/main']],
                 extensions: [cleanBeforeCheckout()],
                 userRemoteConfigs: [[credentialsId: 'github-ssh', url: 'git@github.com:Samah-00/order.git']])
+                echo "status: ${current_status}"
+                echo "branch: ${branch}"
+                echo "merged: ${merged}"
             }
         }
         stage('Build and Test') {
