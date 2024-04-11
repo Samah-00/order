@@ -16,6 +16,9 @@ pipeline {
             }
         }
         stage('Build and Test') {
+             when {
+                expression { return current_status == "closed" && merged == "true" && branch == "main" }
+            }
             steps {
                 script {
                     bat "mvn clean install"
