@@ -1,12 +1,11 @@
 pipeline {
     agent any
+    tools {
+        maven "maven"
+    }
     environment {
         dockerImage=''
         registry = "rajabisamah/order-service"
-        registryCredential = credentials('dockerhub-id')
-    }
-    tools {
-        maven "maven"
     }
     stages {
         stage('Checkout') {
@@ -33,16 +32,17 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    // Push Docker image to DockerHub
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-id') {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub_id') {
+                        dockerImage.push()
                         dockerImage.push('latest')
                     }
                 }
             }
         }
-        stage('Clean up') {
-            steps {
-                bat 'del /s /q order' // Delete order directory recursively (/s) and quietly (/q)
+    }
+    post {
+        always {
+            script {
                 bat "docker rmi $registry:$BUILD_NUMBER"
             }
         }
