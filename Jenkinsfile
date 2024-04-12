@@ -17,9 +17,9 @@ pipeline {
         }
         stage ('temp') {
                 steps {
-                    echo "status: ${params.current_status}"
-                    echo "branch: ${params.branch}"
-                    echo "merged: ${params.merged}"
+                    echo "status: ${current_status}"
+                    echo "branch: ${branch}"
+                    echo "merged: ${merged}"
                 }
         }
         stage('Build and Test') {
