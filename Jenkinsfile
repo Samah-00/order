@@ -23,7 +23,7 @@ pipeline {
                 }
         }
         stage('Build and Test') {
-             when {
+            when {
                 expression { return current_status == "closed" && merged == "true" && branch == "main" }
             }
             steps {
@@ -33,6 +33,9 @@ pipeline {
             }
         }
         stage('Build Docker Image') {
+            when {
+                expression { return current_status == "closed" && merged == "true" && branch == "main" }
+            }
             steps {
                 script {
                     dockerImage = docker.build registry + ":$BUILD_NUMBER"
@@ -40,6 +43,9 @@ pipeline {
             }
         }
         stage('Push to Docker Hub') {
+            when {
+                expression { return current_status == "closed" && merged == "true" && branch == "main" }
+            }
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub_id') {
@@ -53,8 +59,7 @@ pipeline {
     post {
         always {
             script {
-                bat "docker rmi $registry:$BUILD_NUMBER"
-            }
+                bat "docker rmi -f $registry:$BUILD_NUMBER"            }
         }
     }
 }
