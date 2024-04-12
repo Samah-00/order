@@ -8,6 +8,17 @@ pipeline {
         registry = "rajabisamah/order-service"
     }
     stages {
+        stage('Initial Checks') {
+            steps {
+                script {
+                    if (current_status == "closed" && merged == "true" && branch == "main") {
+                        env.executeStages = true
+                    } else {
+                        env.executeStages = false
+                    }
+                }
+            }
+        }
         stage('Checkout') {
             steps {
                 checkout scmGit(branches: [[name: '*/main']],
@@ -15,16 +26,9 @@ pipeline {
                 userRemoteConfigs: [[credentialsId: 'github-ssh', url: 'git@github.com:Samah-00/order.git']])
             }
         }
-        stage ('temp') {
-                steps {
-                    echo "status: ${current_status}"
-                    echo "branch: ${branch}"
-                    echo "merged: ${merged}"
-                }
-        }
         stage('Build and Test') {
             when {
-                expression { return current_status == "closed" && merged == "true" && branch == "main" }
+                expression { return env.executeStages }
             }
             steps {
                 script {
@@ -34,7 +38,7 @@ pipeline {
         }
         stage('Build Docker Image') {
             when {
-                expression { return current_status == "closed" && merged == "true" && branch == "main" }
+                expression { return env.executeStages }
             }
             steps {
                 script {
@@ -44,7 +48,7 @@ pipeline {
         }
         stage('Push to Docker Hub') {
             when {
-                expression { return current_status == "closed" && merged == "true" && branch == "main" }
+                expression { return env.executeStages }
             }
             steps {
                 script {
