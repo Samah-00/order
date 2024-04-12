@@ -15,13 +15,6 @@ pipeline {
                 userRemoteConfigs: [[credentialsId: 'github-ssh', url: 'git@github.com:Samah-00/order.git']])
             }
         }
-        stage ('temp') {
-                steps {
-                    echo "status: ${current_status}"
-                    echo "branch: ${branch}"
-                    echo "merged: ${merged}"
-                }
-        }
         stage('Build and Test') {
             when {
                 expression { return current_status == "closed" && merged == "true" && branch == "main" }
