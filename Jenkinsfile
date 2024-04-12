@@ -24,7 +24,7 @@ pipeline {
         }
         stage('Build and Test') {
              when {
-                expression { return params.current_status == "closed" && params.merged == "true" && params.branch == "main" }
+                expression { return current_status == "closed" && merged == "true" && branch == "main" }
             }
             steps {
                 script {
